@@ -32,4 +32,12 @@ RSpec.describe Glossary do
       end
     end
   end
+
+  context 'with empty parameters' do
+    let(:glossary) { build(:glossary, source_code: '', target_code: '') }
+
+    it 'is not valid' do
+      expect { glossary.save! }.to raise_error(ActiveRecord::RecordInvalid)
+    end
+  end
 end

@@ -12,7 +12,7 @@ RSpec.describe Term do
   context 'with empty parameters' do
     let(:term) { build(:term, source_term: '', target_term: '') }
 
-    it 'is not valid without a name' do
+    it 'is not valid' do
       expect { term.save! }.to raise_error(ActiveRecord::RecordInvalid)
     end
   end
