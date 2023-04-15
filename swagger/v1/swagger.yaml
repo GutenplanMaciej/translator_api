@@ -1,0 +1,338 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/api/glossaries":
+    get:
+      summary: List glossaries
+      tags:
+      - Glossaries
+      description: List glossaries
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+              - id: 847e3dd8-28c5-428d-85c5-547306a086be
+                source_code: th
+                target_code: uz
+                terms:
+                - id: 842705d2-35b0-4510-83a5-def5a9d8880e
+                  source_term: I regret that I should leave this world without again
+                    beholding him.
+                  target_term: I'll be in Hell before you start breakfast! Let her
+                    rip!
+                  glossary_id: 847e3dd8-28c5-428d-85c5-547306a086be
+                  created_at: '2023-04-15T17:48:00.971Z'
+                  updated_at: '2023-04-15T17:48:00.971Z'
+                - id: 0e29d3dc-f328-4376-9519-8770d2a56e16
+                  source_term: I'll be in Hell before you start breakfast! Let her
+                    rip!
+                  target_term: It's stopped.
+                  glossary_id: 847e3dd8-28c5-428d-85c5-547306a086be
+                  created_at: '2023-04-15T17:48:00.973Z'
+                  updated_at: '2023-04-15T17:48:00.973Z'
+              - id: 49c0370a-bd82-45d0-90c2-ffc108175b56
+                source_code: ru
+                target_code: km
+                terms:
+                - id: 7cdcb901-95d8-45cf-a97a-49cc965257a7
+                  source_term: Okay, I won't.
+                  target_term: One! Two! Three!
+                  glossary_id: 49c0370a-bd82-45d0-90c2-ffc108175b56
+                  created_at: '2023-04-15T17:48:00.975Z'
+                  updated_at: '2023-04-15T17:48:00.975Z'
+                - id: 91d5088a-7597-49e6-a21e-deb57d84bf17
+                  source_term: Do you want me to come with you?
+                  target_term: I regret that I should leave this world without again
+                    beholding him.
+                  glossary_id: 49c0370a-bd82-45d0-90c2-ffc108175b56
+                  created_at: '2023-04-15T17:48:00.976Z'
+                  updated_at: '2023-04-15T17:48:00.976Z'
+              - id: 1b9b3a91-5255-4f7b-ba44-41df1810bdb6
+                source_code: ka
+                target_code: mt
+                terms:
+                - id: 584d77ed-80aa-4ba0-ade9-f3cceb62fe21
+                  source_term: I want to go home.
+                  target_term: Am I dying, or is this my birthday?
+                  glossary_id: 1b9b3a91-5255-4f7b-ba44-41df1810bdb6
+                  created_at: '2023-04-15T17:48:00.980Z'
+                  updated_at: '2023-04-15T17:48:00.980Z'
+                - id: 026c85db-a599-4ebe-85eb-79e960c8354c
+                  source_term: I don't know.
+                  target_term: I don't think they even heard me.
+                  glossary_id: 1b9b3a91-5255-4f7b-ba44-41df1810bdb6
+                  created_at: '2023-04-15T17:48:00.981Z'
+                  updated_at: '2023-04-15T17:48:00.981Z'
+    post:
+      summary: Create glossary
+      tags:
+      - Glossaries
+      description: Create new glossary
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                id: 2386ed2e-83ed-444a-a1b3-3d6ebce3d33e
+                source_code: co
+                target_code: zh
+                terms: []
+        400 (1):
+          description: Bad request response
+          content:
+            application/json:
+              example:
+                error: 'param is missing or the value is empty: glossary'
+        400 (2):
+          description: Bad request response
+          content:
+            application/json:
+              example:
+                error: Source code and target code needs to be uniq in application
+        '422':
+          description: Unprocessable entity response
+          content:
+            application/json:
+              example:
+                error:
+                - Source code can't be blank
+                - Target code can't be blank
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/glossary"
+  "/api/glossaries/{glossary_id}/terms":
+    post:
+      summary: Creates a term
+      tags:
+      - Glossaries
+      description: Creates a term in the given glossary
+      parameters:
+      - name: glossary_id
+        in: path
+        format: uuid
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                id: dfef4224-86f8-4cdc-a3fb-ba991a92296e
+                source_term: Okay, I won't.
+                target_term: Hurrah for anarchy! This is the happiest moment of my
+                  life.
+                glossary_id: 1f8874a8-fba7-432c-a830-89e9f0f51cc3
+                created_at: '2023-04-15T17:48:01.020Z'
+                updated_at: '2023-04-15T17:48:01.020Z'
+        '400':
+          description: Bad request response
+          content:
+            application/json:
+              example:
+                error: 'param is missing or the value is empty: term'
+        422 (1):
+          description: Unprocessable entity response
+          content:
+            application/json:
+              example:
+                error:
+                - Glossary must exist
+        422 (2):
+          description: Unprocessable entity response
+          content:
+            application/json:
+              example:
+                error:
+                - Source term can't be blank
+                - Target term can't be blank
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/term"
+  "/api/glossaries/{id}":
+    get:
+      summary: Get glossary
+      tags:
+      - Glossaries
+      description: Retrieve information about specific glossary
+      parameters:
+      - name: id
+        in: path
+        format: uuid
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                id: a7b59d81-7d77-4d42-a8fd-1031a36c522c
+                source_code: wo
+                target_code: gv
+                terms:
+                - id: '029dbf64-2330-4cc1-a50a-907eaaf5abca'
+                  source_term: All my possessions for a moment of time.
+                  target_term: That was the best ice-cream soda I ever tasted.
+                  glossary_id: a7b59d81-7d77-4d42-a8fd-1031a36c522c
+                  created_at: '2023-04-15T17:48:01.068Z'
+                  updated_at: '2023-04-15T17:48:01.068Z'
+                - id: bcc58cc8-ecd9-42c4-9274-4b7f0840abd2
+                  source_term: No comment.
+                  target_term: I am confound.
+                  glossary_id: a7b59d81-7d77-4d42-a8fd-1031a36c522c
+                  created_at: '2023-04-15T17:48:01.069Z'
+                  updated_at: '2023-04-15T17:48:01.069Z'
+        '404':
+          description: Not found response
+          content:
+            application/json:
+              example:
+                error: Couldn't find Glossary with 'id'=8e0e7929-6a01-4cd1-ba9d-e384484f15b3
+  "/api/translations":
+    post:
+      summary: Create translations
+      tags:
+      - Translations
+      description: Create new translation
+      parameters: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                id: 9fd005aa-e93b-4850-8cbf-949d69c4c0e3
+                source_language_code: hi
+                target_language_code: os
+                source_text: My vocabulary did this to me. Your love will let you
+                  go on…
+                glossary:
+                  id: 3a6169dc-12ee-41a4-9b54-8537582ad6cb
+                  source_code: hi
+                  target_code: os
+                  created_at: '2023-04-15T17:48:01.095Z'
+                  updated_at: '2023-04-15T17:48:01.095Z'
+                highlighted_text: 
+                occurrences: 
+        400 (1):
+          description: Bad request response
+          content:
+            application/json:
+              example:
+                error: 'param is missing or the value is empty: translation'
+        400 (2):
+          description: Bad request response
+          content:
+            application/json:
+              example:
+                error: Language codes for translations do not match ones in glossary
+        422 (1):
+          description: Unprocessable entity response
+          content:
+            application/json:
+              example:
+                error:
+                - Source language code can't be blank
+                - Target language code can't be blank
+                - Source text can't be blank
+        422 (2):
+          description: Unprocessable entity response
+          content:
+            application/json:
+              example:
+                error:
+                - Source text is too long (maximum is 5000 characters)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/translation"
+  "/api/translations/{id}":
+    get:
+      summary: Get translation
+      tags:
+      - Translations
+      description: Retrieve information about specific translation
+      parameters:
+      - name: id
+        in: path
+        format: uuid
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                id: 6baa032b-524c-4e17-bfd0-32d85dddb029
+                source_language_code: ka
+                target_language_code: aa
+                source_text: This is test text
+                glossary:
+                  id: dc2ddbda-3486-4f8b-9db1-4b5d268e1f97
+                  source_code: de
+                  target_code: xh
+                  created_at: '2023-04-15T17:48:01.130Z'
+                  updated_at: '2023-04-15T17:48:01.130Z'
+                highlighted_text: This is <HIGHLIGHT> test </HIGHLIGHT> text
+                occurrences:
+                - test
+        '404':
+          description: Not found response
+          content:
+            application/json:
+              example:
+                error: Couldn't find Translation with 'id'=8e0e7929-6a01-4cd1-ba9d-e384484f15b3
+servers:
+- url: https://{defaultHost}
+  variables:
+    defaultHost:
+      default: localhost:3000
+components:
+  schemas:
+    glossary:
+      type: object
+      properties:
+        source_code:
+          type: string
+          example: pl
+        target_code:
+          type: string
+          example: en
+    term:
+      type: object
+      properties:
+        source_term:
+          type: string
+          example: Dzień dobry
+        target_term:
+          type: string
+          example: Good morning
+    translation:
+      type: object
+      properties:
+        source_language_code:
+          type: string
+          example: pl
+        target_language_code:
+          type: string
+          example: en
+        source_text:
+          type: string
+          example: Text to translate
